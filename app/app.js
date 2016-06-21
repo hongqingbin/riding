@@ -56,5 +56,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.listen(9527, function () {
+  console.log('app is listening at port 9527');
+});
 
 module.exports = app;
