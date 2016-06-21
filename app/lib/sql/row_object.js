@@ -1,15 +1,17 @@
 var mysql = require("mysql");
-function RowObject(tableName) {
+var RowObject = exports = module.exports = {};
+RowObject.RowObject = function(tableName) {
 	if(tableName === null || tableName === undefined || tableName === "") {
 		throw "tableName is null";
 	}
 	this.tableName = tableName;
 	this.fieldNames = [];
 	this.fieldValues = [];
-	this.recid = null;
-}
+	this.recid = new Date().toString();
+	return this;
+};
 
-RowObject.prototype.getFieldValue = function(fieldName) {
+RowObject.getFieldValue = function(fieldName) {
 	if(fieldName === null || fieldName === undefined || fieldName === "") {
 		throw "fieldName is null";
 	}
@@ -20,7 +22,7 @@ RowObject.prototype.getFieldValue = function(fieldName) {
 	return this.fieldValues[index];
 };
 
-RowObject.prototype.setFieldValue = function(fieldName, fieldValue) {
+RowObject.setFieldValue = function(fieldName, fieldValue) {
 	if(fieldName === null || fieldName === undefined || fieldName === "") {
 		throw "fieldName is null";
 	}
@@ -36,7 +38,7 @@ RowObject.prototype.setFieldValue = function(fieldName, fieldValue) {
 	}
 };
 
-QueryDefine.prototype.toInsertSqlString = function() {
+RowObject.toInsertSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
@@ -60,7 +62,7 @@ QueryDefine.prototype.toInsertSqlString = function() {
 	return sql;
 };
 
-QueryDefine.prototype.toUpdateSqlString = function() {
+RowObject.toUpdateSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
@@ -76,7 +78,7 @@ QueryDefine.prototype.toUpdateSqlString = function() {
 };
 
 
-QueryDefine.prototype.toDeleteSqlString = function() {
+RowObject.toDeleteSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
@@ -91,7 +93,7 @@ QueryDefine.prototype.toDeleteSqlString = function() {
 	return sql;
 };
 
-QueryDefine.prototype.toFindSqlString = function() {
+RowObject.toFindSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
@@ -105,5 +107,3 @@ QueryDefine.prototype.toFindSqlString = function() {
 	}
 	return sql;
 };
-
-module.exports = RowObject;

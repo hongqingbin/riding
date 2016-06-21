@@ -1,52 +1,86 @@
 var mysql = require("mysql");
-var row_object = require("row_object");
+var row_object = require("./row_object");
 var pool = mysql.createPool({
   connectionLimit : 2,
   host     : 'localhost',
   user     : 'root',
   password : 'mysql',
-  database : 'sjyz'
+  database : 'rider'
 });
-
-function SqlExecutor() {};
-
+var SqlExecutor = exports = module.exports = {};
 SqlExecutor.insertRow = function(row, callback) {
 	var sql = row.toInsertSqlString();
-	connection.query(sql, row.fieldValues, function(err, result) {
+	console.log(sql);
+	pool.getConnection(function(err, connection) {
 		if (err) {
 			throw err;
 		}
-		connection.release();
+		connection.query(sql, row.fieldValues, function(err2, result) {
+			if (err2) {
+				throw err2;
+			}
+			connection.release();
+			if(callback) {
+				callback(err2, result);
+			}
+		});
 	});
 };
 
 SqlExecutor.updateRow = function(row, callback) {
 	var sql = row.toUpdateSqlString();
-	connection.query(sql, row.fieldValues, function(err, result) {
+	pool.getConnection(function(err, connection) {
 		if (err) {
 			throw err;
 		}
-		connection.release();
+		connection.query(sql, row.fieldValues, function(err2, result) {
+			if (err2) {
+				throw err2;
+			}
+			connection.release();
+			if(callback) {
+				callback(err2, result);
+			}
+		});
 	});
+	
 };
 
 SqlExecutor.deleteRow = function(row, callback) {
 	var sql = row.toDeleteSqlString();
-	connection.query(sql, row.fieldValues, function(err, result) {
+	pool.getConnection(function(err, connection) {
 		if (err) {
 			throw err;
 		}
-		connection.release();
+		connection.query(sql, row.fieldValues, function(err2, result) {
+			if (err2) {
+				throw err2;
+			}
+			connection.release();
+			if(callback) {
+				callback(err2, result);
+			}
+		});
 	});
+	
 };
 
 SqlExecutor.findRow = function(row, callback) {
 	var sql = row.toFindSqlString();
-	connection.query(sql, row.fieldValues, function(query_err, rows, fields) {
+	
+	pool.getConnection(function(err, connection) {
 		if (err) {
 			throw err;
 		}
-		connection.release();
+		connection.query(sql, row.fieldValues, function(err2, rows, fields) {
+			if (err2) {
+				throw err2;
+			}
+			connection.release();
+			if(callback) {
+				callback(rows, fields);
+			}
+		});
 	});
 };
 
@@ -61,11 +95,10 @@ SqlExecutor.queryRows = function(query) {
 				throw query_err;	
 			}
 			connection.release();
-			if(query.callback && query.callback typeof Function) {
+			if(query.callback) {
 				query.callback(rows, fields);  
 			}
-	    });
+		});
 	});
 };
 
-module.exports = SqlExecutor;
