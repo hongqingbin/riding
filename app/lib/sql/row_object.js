@@ -7,7 +7,7 @@ RowObject.RowObject = function(tableName) {
 	this.tableName = tableName;
 	this.fieldNames = [];
 	this.fieldValues = [];
-	this.recid = new Date().toString();
+	this.id = null;
 	return this;
 };
 
@@ -26,15 +26,16 @@ RowObject.setFieldValue = function(fieldName, fieldValue) {
 	if(fieldName === null || fieldName === undefined || fieldName === "") {
 		throw "fieldName is null";
 	}
-	var index = this.fieldNames.indexOf(fieldName);
-	if(index < 0) {
-		this.fieldNames.push(fieldName);
-		this.fieldValues.push(fieldValue);
+	if("id" == fieldName) {
+		this.id = fieldValue;
 	}else {
-		this.fieldValues[index] = fieldValue;
-	}
-	if("recid" == fieldName) {
-		this.recid = fieldValue;
+		var index = this.fieldNames.indexOf(fieldName);
+		if(index < 0) {
+			this.fieldNames.push(fieldName);
+			this.fieldValues.push(fieldValue);
+		}else {
+			this.fieldValues[index] = fieldValue;
+		}
 	}
 };
 

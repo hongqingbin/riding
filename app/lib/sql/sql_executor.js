@@ -15,14 +15,27 @@ SqlExecutor.insertRow = function(row, callback) {
 		if (err) {
 			throw err;
 		}
-		connection.query(sql, row.fieldValues, function(err2, result) {
-			if (err2) {
-				throw err2;
-			}
-			connection.release();
-			if(callback) {
-				callback(err2, result);
-			}
+		connection.beginTransaction(function(err) {
+			if (err) { throw err; }
+			connection.query(sql, row.fieldValues, function(err2, result) {
+				if (err2) {
+					return connection.rollback(function() {
+						throw err2;
+					});
+				}
+				connection.commit(function(err) {
+					if (err) {
+						return connection.rollback(function() {
+							throw err;
+						});
+					}
+					console.log('success!');
+				});
+				connection.release();
+				if(callback) {
+					callback(err2, result);
+				}
+			});
 		});
 	});
 };
