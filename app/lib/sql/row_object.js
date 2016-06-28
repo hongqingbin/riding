@@ -96,6 +96,6 @@ RowObject.toFindSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
-	var sql = "select * from "+this.tableName +" where id=" + mysql.escape(this.id);
+	var sql = "select * from "+this.tableName +" where id=" + this.id;
 	return sql;
 };

@@ -1,14 +1,17 @@
 var mysql = require("mysql");
-function QueryDefine(tableName) {
+
+var QueryDefine = exports = module.exports = {};
+
+QueryDefine.QueryDefine = function (tableName) {
 	this.tableName = tableName;
 	this.fieldNames = [];
 	this.paramNames = [];
 	this.paramOperators = [];
 	this.paramValues = [];
-	this.callback = function(rows, fields) {};
-}
+	return this;
+};
 
-QueryDefine.prototype.addSelectFieldName = function(fieldName) {
+QueryDefine.addSelectFieldName = function(fieldName) {
 	if(fieldName === null || fieldName === undefined || fieldName === "") {
 		throw "fieldName is null";
 	}
@@ -18,7 +21,7 @@ QueryDefine.prototype.addSelectFieldName = function(fieldName) {
 	}
 };
 
-QueryDefine.prototype.addConditionParam = function(name, value, operator) {
+QueryDefine.addConditionParam = function(name, value, operator) {
 	if(name === null || name === undefined || name === "") {
 		throw "name is null";
 	}
@@ -37,11 +40,8 @@ QueryDefine.prototype.addConditionParam = function(name, value, operator) {
 	}
 };
 
-QueryDefine.prototype.setResultCallback(callback) {
-	this.callback = callback;
-};
 
-QueryDefine.prototype.toSqlString = function() {
+QueryDefine.toSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
@@ -71,5 +71,3 @@ QueryDefine.prototype.toSqlString = function() {
 	}
 	return sql;
 };
-
-module.exports = QueryDefine;

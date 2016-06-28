@@ -34,7 +34,7 @@ SqlExecutor.insertRow = function(row, callback) {
 				});
 				connection.release();
 				if(callback) {
-					callback(err2, result);
+					callback(result);
 				}
 			});
 		});
@@ -81,7 +81,7 @@ SqlExecutor.deleteRow = function(row, callback) {
 
 SqlExecutor.findRow = function(row, callback) {
 	var sql = row.toFindSqlString();
-	
+	console.log(sql);
 	pool.getConnection(function(err, connection) {
 		if (err) {
 			throw err;
@@ -98,7 +98,7 @@ SqlExecutor.findRow = function(row, callback) {
 	});
 };
 
-SqlExecutor.queryRows = function(query) {
+SqlExecutor.queryRows = function(query, callback) {
 	var sql = query.toSqlString();
 	pool.getConnection(function(err, connection) {
 		if (err) {
@@ -109,8 +109,8 @@ SqlExecutor.queryRows = function(query) {
 				throw query_err;	
 			}
 			connection.release();
-			if(query.callback) {
-				query.callback(rows, fields);  
+			if(callback) {
+				callback(rows, fields);  
 			}
 		});
 	});
