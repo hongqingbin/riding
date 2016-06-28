@@ -8,6 +8,7 @@ var pool = mysql.createPool({
   database : 'rider'
 });
 var SqlExecutor = exports = module.exports = {};
+
 SqlExecutor.insertRow = function(row, callback) {
 	var sql = row.toInsertSqlString();
 	console.log(sql);
@@ -65,7 +66,7 @@ SqlExecutor.deleteRow = function(row, callback) {
 		if (err) {
 			throw err;
 		}
-		connection.query(sql, row.fieldValues, function(err2, result) {
+		connection.query(sql, function(err2, result) {
 			if (err2) {
 				throw err2;
 			}
@@ -85,7 +86,7 @@ SqlExecutor.findRow = function(row, callback) {
 		if (err) {
 			throw err;
 		}
-		connection.query(sql, row.fieldValues, function(err2, rows, fields) {
+		connection.query(sql, function(err2, rows, fields) {
 			if (err2) {
 				throw err2;
 			}
@@ -114,4 +115,3 @@ SqlExecutor.queryRows = function(query) {
 		});
 	});
 };
-

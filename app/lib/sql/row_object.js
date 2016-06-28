@@ -22,6 +22,10 @@ RowObject.getFieldValue = function(fieldName) {
 	return this.fieldValues[index];
 };
 
+RowObject.setId = function(id) {
+	this.id = id;
+};
+
 RowObject.setFieldValue = function(fieldName, fieldValue) {
 	if(fieldName === null || fieldName === undefined || fieldName === "") {
 		throw "fieldName is null";
@@ -75,6 +79,7 @@ RowObject.toUpdateSqlString = function() {
 			sql = sql + ","
 		}
 	}
+	sql = sql + " where id=" + mysql.escape(this.id);
 	return sql;
 };
 
@@ -83,14 +88,7 @@ RowObject.toDeleteSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
-	var sql = "delete from " + this.tableName +" where";
-	var lastIndex = this.fieldNames.length - 1;
-	for(var index in this.fieldNames) {
-		sql = sql + " " + this.fieldNames[index] + "=?";
-		if(index < lastIndex) {
-			sql = sql + ","
-		}
-	}
+	var sql = "delete from " + this.tableName +" where id=" + mysql.escape(this.id);
 	return sql;
 };
 
@@ -98,13 +96,6 @@ RowObject.toFindSqlString = function() {
 	if(this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
-	var sql = "select * from " + this.tableName +" where";
-	var lastIndex = this.fieldNames.length - 1;
-	for(var index in this.fieldNames) {
-		sql = sql + " " + this.fieldNames[index] + "=?";
-		if(index < lastIndex) {
-			sql = sql + ","
-		}
-	}
+	var sql = "select * from "+this.tableName +" where id=" + mysql.escape(this.id);
 	return sql;
 };
