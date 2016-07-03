@@ -1,7 +1,7 @@
 var mysql = require("mysql");
 var RowObject = exports = module.exports = {};
 RowObject.RowObject = function(tableName) {
-	if(tableName === null || tableName === undefined || tableName === "") {
+	if (tableName === null || tableName === undefined || tableName === "") {
 		throw "tableName is null";
 	}
 	this.tableName = tableName;
@@ -12,11 +12,11 @@ RowObject.RowObject = function(tableName) {
 };
 
 RowObject.getFieldValue = function(fieldName) {
-	if(fieldName === null || fieldName === undefined || fieldName === "") {
+	if (fieldName === null || fieldName === undefined || fieldName === "") {
 		throw "fieldName is null";
 	}
 	var index = this.fieldNames.indexOf(fieldName);
-	if(index < 0) {
+	if (index < 0) {
 		throw "fieldName is not exist";
 	}
 	return this.fieldValues[index];
@@ -27,39 +27,39 @@ RowObject.setId = function(id) {
 };
 
 RowObject.setFieldValue = function(fieldName, fieldValue) {
-	if(fieldName === null || fieldName === undefined || fieldName === "") {
+	if (fieldName === null || fieldName === undefined || fieldName === "") {
 		throw "fieldName is null";
 	}
-	if("id" == fieldName) {
+	if ("id" == fieldName) {
 		this.id = fieldValue;
-	}else {
+	} else {
 		var index = this.fieldNames.indexOf(fieldName);
-		if(index < 0) {
+		if (index < 0) {
 			this.fieldNames.push(fieldName);
 			this.fieldValues.push(fieldValue);
-		}else {
+		} else {
 			this.fieldValues[index] = fieldValue;
 		}
 	}
 };
 
 RowObject.toInsertSqlString = function() {
-	if(this.tableName === null || this.tableName === undefined) {
+	if (this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
-	var sql = "insert into " + this.tableName +" (";
+	var sql = "insert into " + this.tableName + " (";
 	var lastIndex = this.fieldNames.length - 1;
-	for(var index in this.fieldNames) {
+	for (var index in this.fieldNames) {
 		sql = sql + " " + this.fieldNames[index];
-		if(index < lastIndex) {
+		if (index < lastIndex) {
 			sql = sql + ","
 		}
 	}
 	lastIndex = this.fieldValues.length - 1;
 	sql = sql + " ) values (";
-	for(var index in this.fieldValues) {
+	for (var index in this.fieldValues) {
 		sql = sql + " " + "?";
-		if(index < lastIndex) {
+		if (index < lastIndex) {
 			sql = sql + ","
 		}
 	}
@@ -68,14 +68,14 @@ RowObject.toInsertSqlString = function() {
 };
 
 RowObject.toUpdateSqlString = function() {
-	if(this.tableName === null || this.tableName === undefined) {
+	if (this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
-	var sql = "update " + this.tableName +" set";
+	var sql = "update " + this.tableName + " set";
 	var lastIndex = this.fieldNames.length - 1;
-	for(var index in this.fieldNames) {
+	for (var index in this.fieldNames) {
 		sql = sql + " " + this.fieldNames[index] + "=?";
-		if(index < lastIndex) {
+		if (index < lastIndex) {
 			sql = sql + ","
 		}
 	}
@@ -85,17 +85,17 @@ RowObject.toUpdateSqlString = function() {
 
 
 RowObject.toDeleteSqlString = function() {
-	if(this.tableName === null || this.tableName === undefined) {
+	if (this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
-	var sql = "delete from " + this.tableName +" where id=" + mysql.escape(this.id);
+	var sql = "delete from " + this.tableName + " where id=" + mysql.escape(this.id);
 	return sql;
 };
 
 RowObject.toFindSqlString = function() {
-	if(this.tableName === null || this.tableName === undefined) {
+	if (this.tableName === null || this.tableName === undefined) {
 		throw "tableName is null";
 	}
-	var sql = "select * from "+this.tableName +" where id=" + this.id;
+	var sql = "select * from " + this.tableName + " where id=" + this.id;
 	return sql;
 };
